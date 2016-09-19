@@ -1,3 +1,5 @@
+*Accounting.js bumped to v0.4.1 and updated as per [this PR](https://github.com/openexchangerates/accounting.js/pull/57)*
+
 # Accounting.js is a tiny JavaScript library for number, money and currency formatting
 
 Provides an easy-to-use Rails 3.1 asset for [Accounting.js](http://josscrowcroft.github.com/accounting.js/)

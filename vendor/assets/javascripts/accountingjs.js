@@ -1,12 +1,13 @@
 /*!
- * accounting.js v0.3.2
- * Copyright 2011, Joss Crowcroft
+ * accounting.js v0.4.1.1
+ * Copyright 2014 Open Exchange Rates
  *
  * Freely distributable under the MIT license.
  * Portions of accounting.js are inspired or borrowed from underscore.js
  *
  * Full details and documentation:
- * http://josscrowcroft.github.com/accounting.js/
+ * http://openexchangerates.github.io/accounting.js/
+ * https://github.com/openexchangerates/accounting.js/pull/57
  */
 
 (function(root, undefined) {
@@ -17,7 +18,7 @@
   var lib = {};
 
   // Current version
-  lib.version = '0.3.2';
+  lib.version = '0.4.1.1';
 
 
   /* --- Exposed settings --- */
@@ -166,7 +167,7 @@
 
   /**
    * Takes a string/array of strings, removes all formatting/cruft and returns the raw float value
-   * alias: accounting.`parse(string)`
+   * Alias: `accounting.parse(string)`
    *
    * Decimal must be included in the regular expression to match floats (defaults to
    * accounting.settings.number.decimal), so if the number uses a non-standard decimal 
@@ -174,9 +175,18 @@
    *
    * Also matches bracketed negatives (eg. "$ (1.99)" => -1.99)
    *
-   * Doesn't throw any errors (`NaN`s become 0) but this may change in future
+   * Options:
+   *   returnNaN: if truthy unformat() will return NaN instead of returning 0
+   *   in the case of an error.
+   *
+   * Doesn't throw any errors (`NaN`s become 0 unless options.returnNaN is truthy)
    */
-  var unformat = lib.unformat = lib.parse = function(value, decimal) {
+  var unformat = lib.unformat = lib.parse = function(value, decimal, options) {
+    // parse options
+    var returnNaN = (typeof options == 'object') 
+                    && typeof(options['returnNaN'] != undefined) 
+                    && options.returnNaN;
+
     // Recursively unformat arrays:
     if (isArray(value)) {
       return map(value, function(val) {
@@ -203,7 +213,7 @@
       );
 
     // This will fail silently which may cause trouble, let's wait and see:
-    return !isNaN(unformatted) ? unformatted : 0;
+    return isNaN(unformatted) ? (returnNaN ? NaN : 0) : unformatted;
   };
 
 
@@ -224,11 +234,12 @@
 
   /**
    * Format a number, with comma-separated thousands and custom precision/decimal places
+   * Alias: `accounting.format()`
    *
    * Localise by overriding the precision and thousand / decimal separators
    * 2nd parameter `precision` can be an object matching `settings.number`
    */
-  var formatNumber = lib.formatNumber = function(number, precision, thousand, decimal) {
+  var formatNumber = lib.formatNumber = lib.format = function(number, precision, thousand, decimal) {
     // Resursively format arrays:
     if (isArray(number)) {
       return map(number, function(val) {
