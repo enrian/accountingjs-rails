@@ -170,7 +170,7 @@
    * Alias: `accounting.parse(string)`
    *
    * Decimal must be included in the regular expression to match floats (defaults to
-   * accounting.settings.number.decimal), so if the number uses a non-standard decimal 
+   * accounting.settings.number.decimal), so if the number uses a non-standard decimal
    * separator, provide it as the second argument.
    *
    * Also matches bracketed negatives (eg. "$ (1.99)" => -1.99)
@@ -183,8 +183,8 @@
    */
   var unformat = lib.unformat = lib.parse = function(value, decimal, options) {
     // parse options
-    var returnNaN = (typeof options == 'object') 
-                    && typeof(options['returnNaN'] != undefined) 
+    var returnNaN = (typeof options == 'object')
+                    && typeof(options['returnNaN'] != undefined)
                     && options.returnNaN;
 
     // Recursively unformat arrays:
@@ -195,7 +195,7 @@
     }
 
     // Fails silently (need decent errors):
-    value = value || 0;
+    value = value || (returnNaN ? NaN : 0);
 
     // Return the value as-is if it's already a number:
     if (typeof value === "number") return value;
